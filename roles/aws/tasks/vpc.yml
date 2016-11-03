@@ -1,0 +1,26 @@
+- name: Create VPC 
+  ec2_vpc_net:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    state: present
+    name: MyVPC
+    cidr_block: 10.0.0.0/16
+    region: "{{ region }}"
+    tags:
+      keyside: valueside
+    tenancy: default
+  register: myvpc
+  tags: c
+
+- name: Remove VPC 
+  ec2_vpc_net:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    name: MyVPC
+    region: "{{ region }}"
+    cidr_block: 10.0.0.0/16
+    state: absent
+  tags: vpc-del
+
+- debug: msg="{{ myvpc.vpc.id }}"
+  tags: test

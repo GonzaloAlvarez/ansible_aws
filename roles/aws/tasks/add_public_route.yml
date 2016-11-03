@@ -1,0 +1,25 @@
+---
+- name: Set up public subnet route table
+  ec2_vpc_route_table:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    state: present
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ region }}"
+    tags:
+       Name: Public
+    subnets:
+      - "{{ vpc_subnet_id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ gateway_id }}"
+  tags: c
+
+- ec2_vpc_route_table_facts:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ region }}"
+    filters:
+      vpc-id: "{{ vpc_id }}"
+  register: myroutet
+  tags: test

@@ -1,0 +1,26 @@
+- name: Create subnet for Instance
+  ec2_vpc_subnet:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    state: present
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ region }}"
+    az: "{{ az1 }}"
+    cidr: "10.0.0.128/25"
+    tags:
+      Name: myresource
+  register: myvpcsubnet
+  tags: c
+
+- name: Remove subnet for Instance
+  ec2_vpc_subnet:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    state: absent
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ region }}"
+    cidr: "10.0.0.128/25"
+  tags: subnet-del
+
+- debug: msg="{{ myvpcsubnet.subnet.id }}"
+  tags: test
