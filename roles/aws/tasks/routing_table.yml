@@ -12,10 +12,3 @@
       - dest: 0.0.0.0/0
         gateway_id: "{{ gateway_id }}"
   tags: demo
-
-- ec2_vpc_route_table_facts:
-    region: "{{ region }}"
-    filters:
-      vpc-id: "{{ vpc_id }}"
-  register: myroutet
-  tags: demo

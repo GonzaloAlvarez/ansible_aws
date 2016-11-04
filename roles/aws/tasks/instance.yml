@@ -1,22 +1,23 @@
 - block:
     - name: Create AWS Instance
       ec2:
-        state: present
         key_name: "{{ key_name }}"
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
         region: "{{ region }}"
         group: "{{ sec_group }}"
-        count: 1
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         assign_public_ip: yes
         wait: yes
+        exact_count: 3
+        count_tag:
+          demo: demosrv
         instance_tags: 
           demo: demosrv
       register: myec2
 
     - name: Add new instance to host group
-      add_host: hostname="{{ item.public_ip }}" groupname=launched-aws
+      add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
       with_items: "{{ myec2.instances }}"
 
     - name: Wait for SSH to come up

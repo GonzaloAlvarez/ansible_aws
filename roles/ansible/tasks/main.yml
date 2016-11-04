@@ -1,15 +1,15 @@
 ---
 - block:
-    - name: Install software-properties-common for Ansible
+    - name: Install software-properties-common
       apt: pkg=software-properties-common state=latest update_cache=yes
     - name: Add Reposotpry
       apt_repository: repo='ppa:ansible/ansible'
-    - name: Install ansible
+    - name: Install Ansible for Ubuntu
       apt: pkg=ansible state=latest update_cache=yes
   when: ansible_distribution == "Ubuntu"
 
 - block:
-    - name: Install Ansible
+    - name: Install Ansible for CentOS
       yum: name=ansible state=present
   when: ansible_distribution == "CentOS"
 

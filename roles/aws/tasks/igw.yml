@@ -1,5 +1,6 @@
 ---
-- ec2_vpc_igw:
+- name: Set up internet gateway
+  ec2_vpc_igw:
     state: present
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
