@@ -9,7 +9,7 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         assign_public_ip: yes
         wait: yes
-        exact_count: 3
+        exact_count: "{{ icnt }}"
         count_tag:
           demo: demosrv
         instance_tags: 
