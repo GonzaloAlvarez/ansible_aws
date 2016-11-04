@@ -1,18 +1,23 @@
 ---
-- name: AWS Playbook
+- name: Bootup AWS instance Play
   hosts: localhost
   gather_facts: no
-
   roles:
     - aws
 
-- name: On AWS
+- name: Configuration for AWS instance Play
   hosts: launched-aws
-
   become: true
   become_user: root
-
   roles:
     - common
     - ansible
+
+#- name: Configuration for AWS instance Play
+#  hosts: tag_demo_demosrv
+#  become: true
+#  become_user: root
+#  roles:
+#    - common
+#    - ansible
 

@@ -1,6 +1,6 @@
 - include: vpc.yml
 - include: vpc_subnet.yml vpc_id="{{ myvpc.vpc.id }}"
 - include: igw.yml vpc_id="{{ myvpc.vpc.id }}"
-- include: add_public_route.yml gateway_id="{{ myigw.gateway_id }}" vpc_id="{{ myvpc.vpc.id }}" vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
+- include: routing_table.yml gateway_id="{{ myigw.gateway_id }}" vpc_id="{{ myvpc.vpc.id }}" vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
 - include: sec_group.yml vpc_id="{{ myvpc.vpc.id }}" 
 - include: instance.yml vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"

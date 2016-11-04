@@ -1,8 +1,6 @@
 - block:
     - name: Create AWS Instance
       ec2:
-        aws_access_key: "{{ aws_access_key }}"
-        aws_secret_key: "{{ aws_secret_key }}"
         state: present
         key_name: "{{ key_name }}"
         instance_type: "{{ instance_type }}"
@@ -13,6 +11,8 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         assign_public_ip: yes
         wait: yes
+        instance_tags: 
+          demo: demosrv
       register: myec2
 
     - name: Add new instance to host group
@@ -22,7 +22,7 @@
     - name: Wait for SSH to come up
       wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
       with_items: "{{ myec2.instances }}"
-  tags: c
+  tags: demo
 
 - name: Terminate AWS Instance
   ec2:

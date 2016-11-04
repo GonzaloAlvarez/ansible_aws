@@ -1,13 +1,11 @@
 ---
 - name: Set up security group
   ec2_group:
-    name: mytkrule
+    name: "{{ sec_group }}"
     description: My Rules
     state: present
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
-    aws_access_key: "{{ aws_access_key }}"
-    aws_secret_key: "{{ aws_secret_key }}"
     rules:
       - proto: tcp
         from_port: 80
@@ -24,4 +22,4 @@
         from_port: 8 # icmp type, -1 = any type
         to_port:  -1 # icmp subtype, -1 = any subtype
         cidr_ip: 0.0.0.0/0
-  tags: c
+  tags: demo
