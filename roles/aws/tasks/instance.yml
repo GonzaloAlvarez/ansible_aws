@@ -1,7 +1,7 @@
 - block:
     - name: Create AWS Instance
       ec2:
-        key_name: "{{ key_name }}"
+        key_name: "{{ my_key }}"
         instance_type: "{{ instance_type }}"
         image: "{{ image }}"
         region: "{{ region }}"
@@ -16,6 +16,10 @@
           demo: demosrv
       register: myec2
 
+    - debug: msg="{{ myec2 }}"
+
+    - debug: msg="{{ myec2.tagged_instances[0].id }}"
+
     - name: Add new instance to host group
       add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
       with_items: "{{ myec2.instances }}"
@@ -25,10 +29,3 @@
       with_items: "{{ myec2.instances }}"
   tags: demo
 
-- name: Terminate AWS Instance
-  ec2:
-    aws_access_key: "{{ aws_access_key }}"
-    aws_secret_key: "{{ aws_secret_key }}"
-    state: absent
-    instance_id: "{{ instance_id }}"
-  tags: instance-del

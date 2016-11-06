@@ -1,0 +1,78 @@
+---
+- name: Terminate Instance 
+  ec2:
+    state: absent
+    region: "{{ region }}"
+    instance_ids: 
+      - "{{ demo_instance }}"
+  register: output
+- debug: msg="{{ output }}"
+
+- name: Remove a key
+  ec2_key:
+    state: absent
+    region: "{{ region }}"
+    name: "{{ my_key }}"
+
+- name: Facts subnet
+  ec2_vpc_subnet_facts:
+    region: "{{ region }}"
+    filters:
+      "tag:Name": demo
+  register: mysubnet
+- debug: msg="{{ mysubnet }}"
+- debug: msg="C {{ mysubnet.subnets[0].cidr_block }}"
+- debug: msg="V {{ mysubnet.subnets[0].vpc_id }}"
+
+- name: Remove a subnet
+  ec2_vpc_subnet:
+    state: absent
+    region: "{{ region }}"
+    vpc_id: "{{ mysubnet.subnets[0].vpc_id }}"
+    cidr: "{{ mysubnet.subnets[0].cidr_block }}"
+
+- name: Remove a internet gateway
+  ec2_vpc_igw:
+    state: absent
+    region: "{{ region }}"
+    vpc_id: "{{ mysubnet.subnets[0].vpc_id }}"
+
+- ec2_vpc_route_table_facts:
+    region: "{{ region }}"
+    filters:
+      "tag:Name": Public
+  register: myroute
+- debug: msg="{{ myroute }}"
+- debug: msg="{{ myroute.route_tables[0].id }}"
+
+- name: Remove a routing table
+  ec2_vpc_route_table:
+    state: absent
+    region: "{{ region }}"
+    route_table_id: "{{ myroute.route_tables[0].id }}"
+    vpc_id: "{{ myroute.route_tables[0].vpc_id }}"
+    subnets: 
+      - "{{ myroute.route_tables[0].routes[0].destination_cidr_block }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ myroute.route_tables[0].routes[1].gateway_id }}"
+
+- name: Remove VPC
+  ec2_vpc_net:
+    state: absent
+    region: "{{ region }}"
+    name: "{{ vpcname }}"
+    cidr_block: 10.0.0.0/16
+
+- name: Remove a volume
+  ec2_vol:
+    state: absent
+    region: "{{ region }}"
+    id: "{{ output.instances.block_device_mapping./dev/sda1.volume_id }}"
+
+- name: Deregister AMI (delete associated snapshots too)
+  ec2_ami:
+    state: absent
+    image_id: "{{ del_image_id }}"
+    region: "{{ region }}"
+    delete_snapshot: True

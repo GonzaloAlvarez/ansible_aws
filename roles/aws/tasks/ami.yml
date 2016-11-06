@@ -1,20 +1,15 @@
 - name: Create AMI from instance
   ec2_ami:
-    name: newtest
+    name: share-ami-image
     state: present
     region: "{{ region }}"
-    instance_id: "{{ myinstance }}"
+    instance_id: "{{ instance_id }}"
     no_reboot: yes
     wait: no
-  register: instance
+    #launch_permissions:
+    #  group_names: ['all']
+  register: image_ret
   tags: demo
 
-
-- name: Deregister AMI (delete associated snapshots too)
-  ec2_ami:
-    state: absent
-    image_id: "{{ instance.image_id }}"
-    region: "{{ region }}"
-    delete_snapshot: True
-  tags: ami-del
-
+- debug: msg="{{ image_ret }}" 
+  tags: demo

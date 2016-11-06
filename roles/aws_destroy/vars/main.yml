@@ -1,0 +1,7 @@
+# Set my variables 
+region: "ap-southeast-1"
+
+my_key: "demo-key"
+vpcname: "MyVPC"
+sec_group: "mytkrule"
+

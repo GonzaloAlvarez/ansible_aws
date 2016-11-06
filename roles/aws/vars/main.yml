@@ -1,10 +1,12 @@
 # Set my variables 
-key_name: "cloud-key"
 region: "ap-southeast-1"
 az1: "ap-southeast-1a"
 az2: "ap-southeast-1b"
 instance_type: "t2.nano"
 image: "ami-f068a193" # Image is CentOS-7.2 AMI
+
+my_key: "demo-key"
+vpcname: "MyVPC"
 sec_group: "mytkrule"
 
 icnt: 1

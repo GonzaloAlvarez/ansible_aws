@@ -3,8 +3,10 @@
   hosts: localhost
   connection: local
   gather_facts: no
+
   roles:
     - aws
+    #- aws_destroy
 
 - name: Configuration for AWS instance Play
   hosts: tag_demo_demosrv
@@ -13,5 +15,5 @@
   roles:
     - common
     - ansible
-  tags: demo
+  #tags: demo
 

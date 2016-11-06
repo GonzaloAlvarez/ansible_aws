@@ -10,13 +10,5 @@
   register: myvpcsubnet
   tags: demo
 
-- name: Remove subnet for Instance
-  ec2_vpc_subnet:
-    state: absent
-    vpc_id: "{{ vpc_id }}"
-    region: "{{ region }}"
-    cidr: "10.0.0.128/25"
-  tags: subnet-del
-
 - debug: msg="{{ myvpcsubnet.subnet.id }}"
   tags: demo

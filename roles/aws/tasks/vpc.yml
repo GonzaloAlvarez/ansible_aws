@@ -1,7 +1,7 @@
 - name: Create VPC 
   ec2_vpc_net:
     state: present
-    name: MyVPC
+    name: "{{ vpcname }}"
     cidr_block: 10.0.0.0/16
     region: "{{ region }}"
     tags:
@@ -9,14 +9,6 @@
     tenancy: default
   register: myvpc
   tags: demo
-
-- name: Remove VPC 
-  ec2_vpc_net:
-    state: absent
-    name: MyVPC
-    region: "{{ region }}"
-    cidr_block: 10.0.0.0/16
-  tags: vpc-del
 
 - debug: msg="{{ myvpc.vpc.id }}"
   tags: demo
