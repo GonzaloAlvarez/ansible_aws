@@ -20,6 +20,8 @@
 
     - debug: msg="{{ myec2.tagged_instances[0].id }}"
 
+    - meta: end_play
+
     - name: Add new instance to host group
       add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
       with_items: "{{ myec2.instances }}"
@@ -27,5 +29,4 @@
     - name: Wait for SSH to come up
       wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
       with_items: "{{ myec2.instances }}"
-  tags: demo
 

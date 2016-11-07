@@ -9,7 +9,5 @@
     #launch_permissions:
     #  group_names: ['all']
   register: image_ret
-  tags: demo
 
 - debug: msg="{{ image_ret }}" 
-  tags: demo

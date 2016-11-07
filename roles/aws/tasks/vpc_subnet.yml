@@ -4,11 +4,9 @@
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
     az: "{{ az1 }}"
-    cidr: "10.0.0.128/25"
+    cidr: "{{ subnet_cidr_block }}"
     tags:
       Name: demo
   register: myvpcsubnet
-  tags: demo
 
 - debug: msg="{{ myvpcsubnet.subnet.id }}"
-  tags: demo

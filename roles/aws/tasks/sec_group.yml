@@ -1,9 +1,9 @@
 ---
 - name: Set up security group
   ec2_group:
+    state: present
     name: "{{ sec_group }}"
     description: My Rules
-    state: present
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
     rules:
@@ -22,4 +22,3 @@
         from_port: 8 # icmp type, -1 = any type
         to_port:  -1 # icmp subtype, -1 = any subtype
         cidr_ip: 0.0.0.0/0
-  tags: demo

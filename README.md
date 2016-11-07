@@ -7,14 +7,20 @@
 - Set up security group
 - Launch instances
 
-## Setup
+# Setup my environment
 
 ```
 source env.rc
 ```
 
-## Run
+# Run
+## Setup Demo
 
 ```
-# ansible-playbook -i ec2.py site.yml -t demo
+# ansible-playbook -i ec2.py site.yml -t setup
+```
+## Destroy Demo
+
+```
+# ansible-playbook -i ec2.py site.yml -t remove -e demo_host=XXX.XXX.XXX.XXX
 ```

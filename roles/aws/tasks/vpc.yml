@@ -2,13 +2,11 @@
   ec2_vpc_net:
     state: present
     name: "{{ vpcname }}"
-    cidr_block: 10.0.0.0/16
+    cidr_block: "{{ vpc_cidr_block }}"
     region: "{{ region }}"
     tags:
       Name: demo
     tenancy: default
   register: myvpc
-  tags: demo
 
 - debug: msg="{{ myvpc.vpc.id }}"
-  tags: demo

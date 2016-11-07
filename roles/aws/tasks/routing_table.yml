@@ -11,4 +11,3 @@
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ gateway_id }}"
-  tags: demo

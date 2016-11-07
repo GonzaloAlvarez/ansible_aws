@@ -5,15 +5,15 @@
   gather_facts: no
 
   roles:
-    - aws
-    #- aws_destroy
+    - { role: aws_destroy, tags: remove } 
+    - { role: aws, tags: setup }
 
-- name: Configuration for AWS instance Play
-  hosts: tag_demo_demosrv
-  become: true
-  become_user: root
-  roles:
-    - common
-    - ansible
-  #tags: demo
+#- name: Configuration for AWS instance Play
+#  hosts: tag_demo_demosrv
+#  become: true
+#  become_user: root
+#  roles:
+#    - common
+#    - ansible
+#  tags: demo
 

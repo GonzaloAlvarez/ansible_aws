@@ -1,78 +1,79 @@
 ---
-- name: Terminate Instance 
-  ec2:
-    state: absent
-    region: "{{ region }}"
-    instance_ids: 
-      - "{{ demo_instance }}"
-  register: output
-- debug: msg="{{ output }}"
+- block:
+  - debug: msg="{{ hostvars[demo_host].ec2_block_devices.sda1 }}"
+  - debug: msg="{{ hostvars[demo_host].ec2_vpc_id }}"
+  - debug: msg="{{ hostvars[demo_host].ec2_subnet_id }}"
+  - debug: msg="{{ hostvars[demo_host].ec2_security_group_names }}"
+  - debug: msg="{{ hostvars[demo_host].ec2_id }}"
+  #- meta: end_play
+  tags: test
 
-- name: Remove a key
-  ec2_key:
-    state: absent
-    region: "{{ region }}"
-    name: "{{ my_key }}"
+- block:
+  - name: Terminate Instance 
+    ec2:
+      state: absent
+      region: "{{ region }}"
+      instance_ids: 
+        - "{{ hostvars[demo_host].ec2_id }}"
+      wait: yes
 
-- name: Facts subnet
-  ec2_vpc_subnet_facts:
-    region: "{{ region }}"
-    filters:
-      "tag:Name": demo
-  register: mysubnet
-- debug: msg="{{ mysubnet }}"
-- debug: msg="C {{ mysubnet.subnets[0].cidr_block }}"
-- debug: msg="V {{ mysubnet.subnets[0].vpc_id }}"
+  - name: Remove a key
+    ec2_key:
+      state: absent
+      region: "{{ region }}"
+      name: "{{ my_key }}"
 
-- name: Remove a subnet
-  ec2_vpc_subnet:
-    state: absent
-    region: "{{ region }}"
-    vpc_id: "{{ mysubnet.subnets[0].vpc_id }}"
-    cidr: "{{ mysubnet.subnets[0].cidr_block }}"
+  - name: Remove a volume
+    ec2_vol:
+      state: absent
+      region: "{{ region }}"
+      id: "{{ hostvars[demo_host].ec2_block_devices.sda1 }}"
+  tags: rm_instance
 
-- name: Remove a internet gateway
-  ec2_vpc_igw:
-    state: absent
-    region: "{{ region }}"
-    vpc_id: "{{ mysubnet.subnets[0].vpc_id }}"
+- block:
+  - name: Remove a subnet
+    ec2_vpc_subnet:
+      state: absent
+      region: "{{ region }}"
+      vpc_id: "{{ hostvars[demo_host].ec2_vpc_id }}"
+      cidr: "{{ subnet_cidr_block }}"
 
-- ec2_vpc_route_table_facts:
-    region: "{{ region }}"
-    filters:
-      "tag:Name": Public
-  register: myroute
-- debug: msg="{{ myroute }}"
-- debug: msg="{{ myroute.route_tables[0].id }}"
+  - name: Remove a internet gateway
+    ec2_vpc_igw:
+      state: absent
+      region: "{{ region }}"
+      vpc_id: "{{ hostvars[demo_host].ec2_vpc_id }}"
 
-- name: Remove a routing table
-  ec2_vpc_route_table:
-    state: absent
-    region: "{{ region }}"
-    route_table_id: "{{ myroute.route_tables[0].id }}"
-    vpc_id: "{{ myroute.route_tables[0].vpc_id }}"
-    subnets: 
-      - "{{ myroute.route_tables[0].routes[0].destination_cidr_block }}"
-    routes:
-      - dest: 0.0.0.0/0
-        gateway_id: "{{ myroute.route_tables[0].routes[1].gateway_id }}"
+  - name: Remove subnets and route tables from VPC
+    ec2_vpc:
+      state: present
+      vpc_id: "{{ hostvars[demo_host].ec2_vpc_id }}"
+      region: "{{ region }}"
+      resource_tags: "{}"
+      subnets: []
+      internet_gateway: False
+      route_tables: []
+  
+  - name: Remove a security group
+    ec2_group:
+      state: absent
+      region: "{{ region }}"
+      name: "{{ hostvars[demo_host].ec2_security_group_names }}"
+      description: My Rules 
+      vpc_id: "{{ hostvars[demo_host].ec2_vpc_id }}"
 
-- name: Remove VPC
-  ec2_vpc_net:
-    state: absent
-    region: "{{ region }}"
-    name: "{{ vpcname }}"
-    cidr_block: 10.0.0.0/16
+  - name: Remove VPC
+    ec2_vpc:
+      state: absent
+      region: "{{ region }}"
+      vpc_id: "{{ hostvars[demo_host].ec2_vpc_id }}"
+      resource_tags: "{}"
+    tags: del_vpc1
+  tags: rm_vpc
 
-- name: Remove a volume
-  ec2_vol:
-    state: absent
-    region: "{{ region }}"
-    id: "{{ output.instances.block_device_mapping./dev/sda1.volume_id }}"
-
-- name: Deregister AMI (delete associated snapshots too)
-  ec2_ami:
-    state: absent
-    image_id: "{{ del_image_id }}"
-    region: "{{ region }}"
-    delete_snapshot: True
+#- name: Deregister AMI (delete associated snapshots too)
+#  ec2_ami:
+#    state: absent
+#    image_id: "{{ del_image_id }}"
+#    region: "{{ region }}"
+#    delete_snapshot: True

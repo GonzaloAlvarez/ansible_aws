@@ -5,4 +5,3 @@
     name: "{{ my_key }}"
     key_material: "{{ item }}"
   with_file: ./keys/demo.key.pub
-  tags: demo
