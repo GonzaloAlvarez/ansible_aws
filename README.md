@@ -3,14 +3,14 @@
 - Create VPC
 - Create Subnet in VPC
 - Set up IGW
-- Set up Routing table 
-- Set up security group
-- Launch instances
+- Set up Routing Table 
+- Set up Security Group
+- Launch Instances
 
 # Setup my environment
 
 ```
-source env.rc
+# source env.rc
 ```
 
 # Run
