@@ -8,11 +8,12 @@
     - { role: aws_destroy, tags: remove } 
     - { role: aws, tags: setup }
 
-#- name: Configuration for AWS instance Play
+#- name: Demo Configuration for AWS instance
 #  hosts: tag_demo_demosrv
 #  become: true
 #  become_user: root
 #  roles:
+#    - wordpress
 #    - common
 #    - ansible
 #  tags: demo
