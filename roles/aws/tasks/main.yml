@@ -1,8 +1,18 @@
-- include: create_key.yml
+---
+- include: key.yml
 - include: vpc.yml
-- include: vpc_subnet.yml vpc_id="{{ myvpc.vpc.id }}"
-- include: igw.yml vpc_id="{{ myvpc.vpc.id }}"
-- include: routing_table.yml gateway_id="{{ myigw.gateway_id }}" vpc_id="{{ myvpc.vpc.id }}" vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
-- include: sec_group.yml vpc_id="{{ myvpc.vpc.id }}" 
-- include: instance.yml vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
-#- include: ami.yml instance_id="{{ myec2.tagged_instances[0].id }}"
+- include: vpc_subnet.yml 
+    vpc_id="{{ myvpc.vpc.id }}"
+- include: igw.yml
+    vpc_id="{{ myvpc.vpc.id }}"
+- include: route_table.yml
+    gateway_id="{{ myigw.gateway_id }}"
+    vpc_id="{{ myvpc.vpc.id }}"
+    vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
+- include: sec_group.yml
+    vpc_id="{{ myvpc.vpc.id }}" 
+- include: instance.yml
+    vpc_subnet_id="{{ myvpcsubnet.subnet.id }}"
+
+#- include: ami.yml
+#    instance_id="{{ myec2.tagged_instances[0].id }}"

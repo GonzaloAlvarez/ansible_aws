@@ -2,10 +2,10 @@
 - name: Set up public subnet route table
   ec2_vpc_route_table:
     state: present
-    vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
+    vpc_id: "{{ vpc_id }}"
     tags:
-       Name: Public
+       Name: demo
     subnets:
       - "{{ vpc_subnet_id }}"
     routes:

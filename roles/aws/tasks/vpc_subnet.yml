@@ -1,12 +1,11 @@
-- name: Create subnet for Instance
+---
+- name: Create AWS VPC subnet
   ec2_vpc_subnet:
     state: present
-    vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
+    vpc_id: "{{ vpc_id }}"
     az: "{{ az1 }}"
     cidr: "{{ subnet_cidr_block }}"
     tags:
       Name: demo
   register: myvpcsubnet
-
-- debug: msg="{{ myvpcsubnet.subnet.id }}"

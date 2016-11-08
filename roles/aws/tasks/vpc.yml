@@ -1,12 +1,10 @@
-- name: Create VPC 
+- name: Create AWS VPC 
   ec2_vpc_net:
     state: present
+    region: "{{ region }}"
     name: "{{ vpcname }}"
     cidr_block: "{{ vpc_cidr_block }}"
-    region: "{{ region }}"
     tags:
       Name: demo
     tenancy: default
   register: myvpc
-
-- debug: msg="{{ myvpc.vpc.id }}"

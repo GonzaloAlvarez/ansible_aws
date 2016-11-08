@@ -1,3 +1,4 @@
+---
 - name: Create AMI from instance
   ec2_ami:
     name: share-ami-image
@@ -9,5 +10,4 @@
     #launch_permissions:
     #  group_names: ['all']
   register: image_ret
-
-- debug: msg="{{ image_ret }}" 
+#- debug: msg="{{ image_ret }}" 

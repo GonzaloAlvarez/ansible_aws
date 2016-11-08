@@ -2,10 +2,10 @@
 - name: Set up security group
   ec2_group:
     state: present
+    region: "{{ region }}"
+    vpc_id: "{{ vpc_id }}"
     name: "{{ sec_group }}"
     description: My Rules
-    vpc_id: "{{ vpc_id }}"
-    region: "{{ region }}"
     rules:
       - proto: tcp
         from_port: 80
@@ -18,6 +18,7 @@
       - proto: tcp
         from_port: 443
         to_port: 443
+        cidr_ip: 0.0.0.0/0
       - proto: icmp
         from_port: 8 # icmp type, -1 = any type
         to_port:  -1 # icmp subtype, -1 = any subtype

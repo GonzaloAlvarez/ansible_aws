@@ -1,3 +1,4 @@
+---
 - block:
     - name: Create AWS Instance
       ec2:
@@ -7,18 +8,14 @@
         region: "{{ region }}"
         group: "{{ sec_group }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
+        exact_count: "{{ icnt }}"
         assign_public_ip: yes
         wait: yes
-        exact_count: "{{ icnt }}"
         count_tag:
           demo: demosrv
         instance_tags: 
           demo: demosrv
       register: myec2
-
-    - debug: msg="{{ myec2 }}"
-
-    - debug: msg="{{ myec2.tagged_instances[0].id }}"
 
     - meta: end_play
 
