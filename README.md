@@ -17,7 +17,7 @@
 ## Setup Demo
 
 ```
-# ansible-playbook -i ec2.py deploy.yml
+# ansible-playbook -i ec2.py setup.yml
 ```
 ## Destroy Demo
 
