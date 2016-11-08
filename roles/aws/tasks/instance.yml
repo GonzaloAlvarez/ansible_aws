@@ -17,13 +17,19 @@
           demo: demosrv
       register: myec2
 
-    - meta: end_play
+    #- meta: end_play
+    
+    - name: Update .ssh/config
+      lineinfile: dest=~/.ssh/config regexp='Host\s(\d+).(\d+).(\d+).(\d+)$' line="Host {{ myec2.tagged_instances[0].public_ip }}"
 
     - name: Add new instance to host group
       add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
       with_items: "{{ myec2.instances }}"
 
     - name: Wait for SSH to come up
-      wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
-      with_items: "{{ myec2.instances }}"
+      wait_for: delay=30 timeout=120 state=started
+
+    #- name: Wait for SSH to come up
+    #  wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
+    #  with_items: "{{ myec2.instances }}"
 

@@ -1,0 +1,8 @@
+---
+- name: Destroy my demo environment
+  hosts: localhost
+  connection: local
+ 
+  roles:
+    - aws_destroy
+

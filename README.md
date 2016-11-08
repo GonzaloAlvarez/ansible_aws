@@ -17,10 +17,10 @@
 ## Setup Demo
 
 ```
-# ansible-playbook -i ec2.py site.yml -t setup
+# ansible-playbook -i ec2.py deploy.yml
 ```
 ## Destroy Demo
 
 ```
-# ansible-playbook -i ec2.py site.yml -t remove -e demo_host=XXX.XXX.XXX.XXX
+# ansible-playbook -i ec2.py destroy.yml -e demo_host=XXX.XXX.XXX.XXX
 ```

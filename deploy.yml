@@ -1,0 +1,26 @@
+---
+- name: Bootup AWS instance Play
+  hosts: localhost
+  connection: local
+ 
+  pre_tasks:
+    - block:
+        - name: Install connect-proxy
+          apt: name="connect-proxy" state=latest force=yes
+          when: ansible_distribution == "Ubuntu"
+        - name: Install connect
+          yum: name="connect" state=present
+          when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
+  roles:
+    - aws
+
+- name: Demo Configuration for AWS instance
+  hosts: tag_demo_demosrv
+  become: true
+  become_user: root
+  roles:
+    - role: wordpress
+    #- common
+    #- ansible
+
