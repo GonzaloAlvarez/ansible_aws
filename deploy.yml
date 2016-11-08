@@ -15,12 +15,19 @@
   roles:
     - aws
 
+  post_tasks:
+    - name: Update .ssh/config
+      lineinfile:
+        dest=~/.ssh/config
+        regexp='Host\s(\d+).(\d+).(\d+).(\d+)$'
+        line="Host {{ myec2.tagged_instances[0].public_ip }}"
+
 - name: Demo Configuration for AWS instance
   hosts: tag_demo_demosrv
   become: true
   become_user: root
   roles:
+    - common
     - role: wordpress
-    #- common
     #- ansible
 

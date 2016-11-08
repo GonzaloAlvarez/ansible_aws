@@ -12,4 +12,3 @@
     - name: Install Ansible for CentOS
       yum: name=ansible state=present
   when: ansible_distribution == "CentOS"
-
