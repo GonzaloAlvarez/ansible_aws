@@ -1,29 +1,38 @@
 ---
-- block:
-    - name: Create AWS Instance
-      ec2:
-        key_name: "{{ my_key }}"
-        instance_type: "{{ instance_type }}"
-        image: "{{ image }}"
-        region: "{{ region }}"
-        group: "{{ sec_group }}"
-        vpc_subnet_id: "{{ vpc_subnet_id }}"
-        exact_count: "{{ icnt }}"
-        assign_public_ip: yes
-        wait: yes
-        count_tag:
-          demo: demosrv
-        instance_tags: 
-          demo: demosrv
-      register: myec2
+- name: Create AWS Instance
+  ec2:
+    key_name: "{{ my_key }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    group: "{{ sec_group }}"
+    vpc_subnet_id: "{{ vpc_subnet_id }}"
+    exact_count: "{{ icnt }}"
+    assign_public_ip: yes
+    wait: yes
+    count_tag:
+      demo: demosrv
+    instance_tags: 
+      demo: demosrv
+  register: myec2
 
-    #- meta: end_play
-    
-    - name: Add new instance to host group
-      add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
-      with_items: "{{ myec2.instances }}"
+- name: Update .ssh/config for accessing throught the proxy 
+  lineinfile:
+    dest=~/.ssh/config
+    regexp='Host\s(\d+).(\d+).(\d+).(\d+)$'
+    line="Host {{ myec2.tagged_instances[0].public_ip }}"
+  when: office
 
-    - name: Wait for SSH to come up
-      wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
-      with_items: "{{ myec2.instances }}"
+- name: Add new instance to host group
+  add_host: hostname="{{ item.public_ip }}" groupname=tag_demo_demosrv
+  with_items: "{{ myec2.instances }}"
+
+- name: Wait for bootup
+  wait_for: delay=30 timeout=120 state=started
+  when: office
+
+- name: Wait for SSH to come up
+  wait_for: host="{{ item.public_dns_name }}" port=22 delay=30 timeout=320 state=started
+  with_items: "{{ myec2.instances }}"
+  when: not office
 
